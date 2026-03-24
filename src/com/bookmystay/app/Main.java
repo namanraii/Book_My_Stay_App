@@ -1,11 +1,12 @@
 package com.bookmystay.app;
 
+import com.bookmystay.app.history.BookingHistory;
 import com.bookmystay.app.inventory.RoomInventory;
 import com.bookmystay.app.reservation.Reservation;
-import com.bookmystay.app.service.AddOnServiceManager;
+import com.bookmystay.app.service.*;
+import com.bookmystay.app.exception.InvalidBookingException
+import com.bookmystay.app.exception.InvalidRoomTypeException
 import com.bookmystay.app.service.BookingRequestQueue;
-import com.bookmystay.app.service.BookingService;
-import com.bookmystay.app.service.RoomSearchService;
 
 /**
  * Entry point for Book My Stay application.
@@ -116,5 +117,17 @@ public class Main {
         BookingReportService reportService = new BookingReportService(history);
         reportService.generateSummary();
         reportService.generateRoomTypeReport();
+        System.out.println("\n===== UC9: Validation Testing =====");
+
+// Invalid guest name
+        queue.addRequest(new Reservation("", "Single Room"));
+
+// Invalid room type
+        queue.addRequest(new Reservation("TestUser", "Luxury Room"));
+
+// Process again
+        while (!queue.isEmpty()) {
+            bookingService.processNextRequest();
+        }
     }
 }
