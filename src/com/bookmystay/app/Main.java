@@ -2,6 +2,7 @@ package com.bookmystay.app;
 
 import com.bookmystay.app.inventory.RoomInventory;
 import com.bookmystay.app.reservation.Reservation;
+import com.bookmystay.app.service.AddOnServiceManager;
 import com.bookmystay.app.service.BookingRequestQueue;
 import com.bookmystay.app.service.BookingService;
 import com.bookmystay.app.service.RoomSearchService;
@@ -76,5 +77,27 @@ public class Main {
 // Show updated inventory
         System.out.println("\n===== Updated Inventory =====");
         inventory.displayInventory();
+
+        // ===== UC7: Add-On Services =====
+        AddOnServiceManager serviceManager = new AddOnServiceManager();
+
+// Assume these are reservation IDs generated in UC6
+        String res1 = "R-1001";
+        String res2 = "R-1002";
+
+// Create services
+        com.bookmystay.app.addon.AddOnService breakfast = new com.bookmystay.app.addon.AddOnService("Breakfast", 500);
+        com.bookmystay.app.addon.AddOnService spa = new com.bookmystay.app.addon.AddOnService("Spa Access", 1500);
+        com.bookmystay.app.addon.AddOnService pickup = new com.bookmystay.app.addon.AddOnService("Airport Pickup", 800);
+
+// Guest selects services
+        serviceManager.addService(res1, breakfast);
+        serviceManager.addService(res1, spa);
+
+        serviceManager.addService(res2, pickup);
+
+// Display services + cost
+        serviceManager.displayServices(res1);
+        serviceManager.displayServices(res2);
     }
 }
