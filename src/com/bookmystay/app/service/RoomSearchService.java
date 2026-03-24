@@ -7,13 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Handles read-only search operations for available rooms.
+ * UC4: Room Search & Availability Check
+ * Handles read-only operations to display available rooms.
  */
 public class RoomSearchService {
 
-    private RoomInventory inventory;
+    private final RoomInventory inventory;
 
     public RoomSearchService(RoomInventory inventory) {
+        if (inventory == null) {
+            throw new IllegalArgumentException("RoomInventory cannot be null");
+        }
         this.inventory = inventory;
     }
 
@@ -21,22 +25,32 @@ public class RoomSearchService {
 
         System.out.println("\n===== Available Rooms =====");
 
-        // Create room objects (domain layer)
-        List<Room> rooms = new ArrayList<>();
-        rooms.add(new SingleRoom());
-        rooms.add(new DoubleRoom());
-        rooms.add(new SuiteRoom());
+        // Domain objects (no duplication of data)
+        List<Room> rooms = List.of(
+                new SingleRoom(),
+                new DoubleRoom(),
+                new SuiteRoom()
+        );
+
+        boolean found = false;
 
         for (Room room : rooms) {
 
-            int available = inventory.getAvailability(room.type);
+            // 🔹 Read-only access (no modification)
+            int available = inventory.getAvailability(room.getType());
 
-            // Only show available rooms
+            // 🔹 Validation logic (filter unavailable rooms)
             if (available > 0) {
-                System.out.println("\n--- " + room.type + " ---");
+                found = true;
+
+                System.out.println("\n--- " + room.getType() + " ---");
                 room.displayDetails();
                 System.out.println("Available: " + available);
             }
+        }
+
+        if (!found) {
+            System.out.println("\nNo rooms available at the moment.");
         }
     }
 }
