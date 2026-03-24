@@ -99,5 +99,22 @@ public class Main {
 // Display services + cost
         serviceManager.displayServices(res1);
         serviceManager.displayServices(res2);
+
+        // ===== UC8: Booking History & Reporting =====
+        BookingHistory history = new BookingHistory();
+        BookingService bookingService = new BookingService(inventory, queue, history);
+
+// Process bookings
+        while (!queue.isEmpty()) {
+            bookingService.processNextRequest();
+        }
+
+// Display history
+        history.displayHistory();
+
+// Reports
+        BookingReportService reportService = new BookingReportService(history);
+        reportService.generateSummary();
+        reportService.generateRoomTypeReport();
     }
 }
