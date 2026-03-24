@@ -1,14 +1,19 @@
-import com.bookmystay.app.rooms.DoubleRoom;
-import com.bookmystay.app.rooms.Room;
-import com.bookmystay.app.rooms.SingleRoom;
-import com.bookmystay.app.rooms.SuiteRoom;
+package com.bookmystay.app;
 
-<<<<<<< HEAD:src/com/bookmystay/app/Main.java
 import com.bookmystay.app.inventory.RoomInventory;
+import com.bookmystay.app.reservation.Reservation;
+import com.bookmystay.app.service.BookingRequestQueue;
+import com.bookmystay.app.service.RoomSearchService;
 
 /**
- * Entry point for the Book My Stay application.
- * Demonstrates UC1 (welcome) + UC3 (centralized inventory).
+ * Entry point for Book My Stay application.
+ * Demonstrates UC1 → UC5.
+ *
+ * UC1: Welcome
+ * UC2: Room Types (used via objects)
+ * UC3: Inventory
+ * UC4: Search
+ * UC5: Booking Request Queue
  *
  * @author Naman Rai
  * @version 1.0
@@ -30,47 +35,28 @@ public class Main {
         // ===== UC3: Centralized Inventory =====
         RoomInventory inventory = new RoomInventory();
 
-        // Display all rooms
+        // Sample inventory setup
+        inventory.setAvailability("Single Room", 3);
+        inventory.setAvailability("Double Room", 2);
+        inventory.setAvailability("Suite Room", 1);
+
+        System.out.println("\n===== Inventory Snapshot =====");
         inventory.displayInventory();
 
-        // Example check
-        System.out.println("\nChecking availability for Single Room:");
-        System.out.println("Available: " + inventory.getAvailability("Single Room"));
+        // ===== UC4: Room Search =====
+        RoomSearchService searchService = new RoomSearchService(inventory);
+        searchService.displayAvailableRooms();
+
+        // ===== UC5: Booking Request Queue =====
+        BookingRequestQueue queue = new BookingRequestQueue();
+
+        System.out.println("\n===== Booking Requests =====");
+
+        queue.addRequest(new Reservation("Naman", "Single Room"));
+        queue.addRequest(new Reservation("Rahul", "Double Room"));
+        queue.addRequest(new Reservation("Ananya", "Suite Room"));
+
+        // Display queue (FIFO order)
+        queue.displayQueue();
     }
-=======
-public static void main(String[] args) {
-
-    // ===== UC1: Welcome =====
-    String appName = "Book My Stay";
-    String version = "v1.0";
-
-    System.out.println("=================================");
-    System.out.println(" Welcome to " + appName);
-    System.out.println(" Version: " + version);
-    System.out.println("=================================");
-    System.out.println("Your hotel booking journey starts here!");
-
-    // ===== UC2: Room Types =====
-    System.out.println("\n===== Room Availability =====");
-
-    Room single = new SingleRoom();
-    Room doubleRoom = new DoubleRoom();
-    Room suite = new SuiteRoom();
-
-    int singleAvailable = 5;
-    int doubleAvailable = 3;
-    int suiteAvailable = 2;
-
-    System.out.println("\n--- Single Room ---");
-    single.displayDetails();
-    System.out.println("Available: " + singleAvailable);
-
-    System.out.println("\n--- Double Room ---");
-    doubleRoom.displayDetails();
-    System.out.println("Available: " + doubleAvailable);
-
-    System.out.println("\n--- Suite Room ---");
-    suite.displayDetails();
-    System.out.println("Available: " + suiteAvailable);
->>>>>>> uc2-room-types:src/Main.java
 }
