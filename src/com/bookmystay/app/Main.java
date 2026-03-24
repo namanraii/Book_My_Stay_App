@@ -3,6 +3,7 @@ package com.bookmystay.app;
 import com.bookmystay.app.inventory.RoomInventory;
 import com.bookmystay.app.reservation.Reservation;
 import com.bookmystay.app.service.BookingRequestQueue;
+import com.bookmystay.app.service.BookingService;
 import com.bookmystay.app.service.RoomSearchService;
 
 /**
@@ -58,5 +59,22 @@ public class Main {
 
         // Display queue (FIFO order)
         queue.displayQueue();
+
+        // ===== UC6: Reservation Processing =====
+        BookingService bookingService = new BookingService(inventory, queue);
+
+        System.out.println("\n===== Processing Bookings =====");
+
+// Process all requests (FIFO)
+        while (!queue.isEmpty()) {
+            bookingService.processNextRequest();
+        }
+
+// Show final allocations
+        bookingService.displayAllocations();
+
+// Show updated inventory
+        System.out.println("\n===== Updated Inventory =====");
+        inventory.displayInventory();
     }
 }
